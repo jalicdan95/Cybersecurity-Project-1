@@ -1,0 +1,38 @@
+#!/bin/bash
+
+my_variable='Our coolest first bash script - October 18th, 2021' 
+echo $my_variable 
+echo "uname is: $(uname)"
+echo "host ip is: $(hostname -i)"
+echo "hostname is: $(hostname)"
+echo "ip address: $(ip a | head -9 | tail -1)"
+echo "DNS Servers: $(grep "nameserver" /etc/resolv.conf)"
+
+mk dir ~/research 2>/dev/null
+
+find -type f -perm 777 >> ~/research/sys_info.txt
+
+ps -aux | awk -F" " '{print $1, $2, $3, $4, $11}' | header >> ~/research/sys_info.txt
+
+for p in ${packages[@]};
+do
+	if [ $(which $p) ]
+	then
+		echo "$p is installed at $(which $p)"
+	else
+		echo "$p is not installed."
+	fi
+done
+
+for user in $(ls /home);
+do
+	for item in $(find /home/$user - iname '*.sh')
+	do
+		echo -e "found a script in $user's home folder! \n $item"
+	done
+done
+
+for f in $(ls ~);
+do
+	sha256sum$f
+done
